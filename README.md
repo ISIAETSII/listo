@@ -100,7 +100,8 @@ Necesitas tener instalados Python 3.12 o superior, MariaDB y git.
    ```
 
 6. **Arrancar.** Ejecuta `flask run` y abre en el navegador la dirección que aparece en la terminal
-   (localhost, puerto 5000). Puedes entrar con el usuario `demo@listo.app` y la contraseña `demo1234`.
+   (localhost, puerto 5000). Puedes entrar con el usuario `demo@listo.app` y la contraseña `demo1234`
+   (solo existe en tu máquina; en producción no se cargan los datos de ejemplo).
    Si el puerto 5000 está ocupado (en macOS suele usarlo AirPlay), arranca con `flask run --port 5001`.
 
 ## Puesta en marcha con Docker

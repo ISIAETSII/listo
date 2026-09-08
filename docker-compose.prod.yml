@@ -1,6 +1,9 @@
 # Despliegue en producción: la aplicación servida por gunicorn + MariaDB.
 #
 #   cp .env.example .env      → y pon valores REALES (SECRET_KEY y contraseñas nuevas)
+#
+# En producción NO se cargan los datos de ejemplo (`flask seed-db`): sus usuarios tienen
+# contraseñas públicas y cualquiera podría entrar con ellos.
 #   docker compose -f docker-compose.prod.yml up -d --build
 #   docker compose -f docker-compose.prod.yml logs -f web
 #   docker compose -f docker-compose.prod.yml down
@@ -55,7 +58,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: sh -c "flask init-db && flask seed-db && gunicorn --bind 0.0.0.0:8000 --workers 2 'app:create_app()'"
+    command: sh -c "flask init-db && gunicorn --bind 0.0.0.0:8000 --workers 2 'app:create_app()'"
 
 volumes:
   mariadb_data:
