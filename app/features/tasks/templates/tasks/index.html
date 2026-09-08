@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Mis tareas{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+  <div>
+    <h1 class="h2 mb-1">Mis tareas</h1>
+    <p class="text-muted mb-0">
+      <span class="badge text-bg-warning" id="pending-count">{{ pending }}</span> pendientes ·
+      <span class="badge text-bg-success" id="done-count">{{ done }}</span> completadas
+    </p>
+  </div>
+  <a href="{{ url_for('tasks.create') }}" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i>Nueva tarea
+  </a>
+</div>
+
+{% if tasks %}
+<ul class="list-group shadow-sm">
+  {% for task in tasks %}
+  <li class="list-group-item d-flex align-items-start gap-3 py-3 {% if task.done %}task-done{% endif %}" data-task-item>
+    {# data-task-toggle: el JavaScript (static/js/tasks.js) escucha los cambios de esta casilla #}
+    <input class="form-check-input mt-1 flex-shrink-0" type="checkbox"
+           data-task-toggle="{{ task.id }}" {% if task.done %}checked{% endif %}
+           aria-label="Marcar como completada">
+    <div class="flex-grow-1">
+      <div class="task-title fw-semibold">{{ task.title }}</div>
+      {% if task.description %}
+        <div class="text-muted small">{{ task.description }}</div>
+      {% endif %}
+      <div class="text-muted small mt-1">
+        <i class="bi bi-calendar3 me-1"></i>{{ task.created_at.strftime("%d/%m/%Y") }}
+      </div>
+    </div>
+    <div class="d-flex gap-1">
+      <a href="{{ url_for('tasks.edit', task_id=task.id) }}" class="btn btn-outline-secondary btn-sm"
+         title="Editar" aria-label="Editar">
+        <i class="bi bi-pencil"></i>
+      </a>
+      <form method="post" action="{{ url_for('tasks.delete', task_id=task.id) }}"
+            onsubmit="return confirm('¿Eliminar esta tarea?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-outline-danger btn-sm" type="submit" title="Eliminar" aria-label="Eliminar">
+          <i class="bi bi-trash"></i>
+        </button>
+      </form>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="card shadow-sm border-0">
+  <div class="card-body text-center py-5">
+    <i class="bi bi-clipboard-check fs-1 text-primary"></i>
+    <p class="lead mt-3 mb-4">Todavía no tienes tareas.</p>
+    <a href="{{ url_for('tasks.create') }}" class="btn btn-primary">Crear la primera</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
+{% endblock %}

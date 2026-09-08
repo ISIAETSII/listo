@@ -1,0 +1,13 @@
+# Configuración de las herramientas de desarrollo: linter (ruff) y tests (pytest).
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+# E/W: estilo (pycodestyle), F: errores (pyflakes), I: orden de los imports (isort)
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+# Los tests viven dentro de cada feature: app/features/<feature>/tests/
+testpaths = ["app"]

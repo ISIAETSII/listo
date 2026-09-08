@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Configuración local (contiene contraseñas): NO se sube al repositorio
+.env
+
+# Carpeta donde Flask guarda ficheros locales (por ejemplo, una base de datos SQLite)
+instance/
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "macros/forms.html" import render_field, render_checkbox %}
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h1 class="h3 mb-4"><i class="bi bi-box-arrow-in-right me-2 text-primary"></i>Entrar</h1>
+
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+          {{ render_field(form.email, autofocus=true) }}
+          {{ render_field(form.password) }}
+          {{ render_checkbox(form.remember) }}
+          {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+
+        <p class="text-center text-muted mt-4 mb-0">
+          ¿No tienes cuenta? <a href="{{ url_for('auth.register') }}">Crea una</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

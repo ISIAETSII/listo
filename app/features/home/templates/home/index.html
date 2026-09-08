@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<section class="hero p-4 p-md-5 mb-5 shadow">
+  <div class="row align-items-center">
+    <div class="col-lg-8">
+      <h1 class="display-4 fw-bold">Listo</h1>
+      <p class="lead mb-4">
+        Un gestor de tareas pequeño, hecho con Flask y organizado por <em>features</em>.
+        Es el proyecto base de la asignatura: sobre él se hacen las prácticas de gestión del código fuente,
+        integración continua, contenedores, JavaScript y Flask.
+      </p>
+      {% if current_user.is_authenticated %}
+        <a class="btn btn-light btn-lg" href="{{ url_for('tasks.index') }}">
+          <i class="bi bi-check2-square me-1"></i>Ir a mis tareas
+        </a>
+      {% else %}
+        <a class="btn btn-light btn-lg me-2" href="{{ url_for('auth.register') }}">Crear cuenta</a>
+        <a class="btn btn-outline-light btn-lg" href="{{ url_for('auth.login') }}">Entrar</a>
+      {% endif %}
+    </div>
+    <div class="col-lg-4 text-center d-none d-lg-block">
+      <i class="bi bi-check2-square" style="font-size: 9rem; opacity: 0.85;"></i>
+    </div>
+  </div>
+</section>
+
+<h2 class="h4 mb-3">¿Cómo está organizado?</h2>
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card feature-card h-100 border-0">
+      <div class="card-body">
+        <i class="bi bi-folder2-open fs-1 text-primary"></i>
+        <h3 class="h5 mt-2">Features</h3>
+        <p class="text-muted mb-0">
+          Cada funcionalidad vive en su carpeta dentro de <code>app/features/</code>:
+          modelos, formularios, servicios, rutas, plantillas y tests, todo junto.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card feature-card h-100 border-0">
+      <div class="card-body">
+        <i class="bi bi-signpost-split fs-1 text-primary"></i>
+        <h3 class="h5 mt-2">Blueprints</h3>
+        <p class="text-muted mb-0">
+          Las rutas de cada feature se agrupan en un <em>blueprint</em> que se registra
+          en <code>create_app()</code>, dentro de <code>app/__init__.py</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card feature-card h-100 border-0">
+      <div class="card-body">
+        <i class="bi bi-database fs-1 text-primary"></i>
+        <h3 class="h5 mt-2">MariaDB + SQLAlchemy</h3>
+        <p class="text-muted mb-0">
+          Los modelos describen las tablas y SQLAlchemy traduce los objetos Python a SQL.
+          Con Docker, la base de datos se levanta con un solo comando.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <h2 class="h4 mb-3">Estructura del proyecto</h2>
+<pre class="tree mb-0">app/
+├── __init__.py       ← create_app(): fábrica de la aplicación
+├── config.py         ← configuración (lee el fichero .env)
+├── extensions.py     ← db, login_manager, csrf
+├── commands.py       ← flask init-db / seed-db / reset-db
+├── templates/        ← base.html y plantillas comunes
+├── static/           ← CSS y JavaScript
+└── features/
+    ├── home/         ← página de inicio
+    ├── auth/         ← registro, login y logout
+    └── tasks/        ← gestor de tareas (HTML + API JSON)
+        ├── __init__.py   ← define el blueprint
+        ├── models.py     ← tabla tasks
+        ├── forms.py      ← formulario (WTForms)
+        ├── services.py   ← lógica de negocio
+        ├── routes.py     ← vistas HTML
+        ├── api.py        ← endpoints JSON
+        ├── seeders.py    ← datos de ejemplo
+        ├── templates/    ← plantillas de la feature
+        └── tests/        ← tests de la feature</pre>
+  </div>
+  <div class="col-lg-6">
+    <h2 class="h4 mb-3">¿Por dónde empiezo?</h2>
+    <ol class="list-group list-group-numbered shadow-sm">
+      <li class="list-group-item">
+        Crea una cuenta (o entra con <code>demo@listo.app</code> / <code>demo1234</code>) y añade tareas.
+      </li>
+      <li class="list-group-item">
+        Abre <code>app/features/tasks/</code> y sigue el camino de una petición:
+        ruta → servicio → modelo → plantilla.
+      </li>
+      <li class="list-group-item">
+        Marca una tarea como completada: lo hace <code>static/js/tasks.js</code>
+        llamando a la API JSON sin recargar la página.
+      </li>
+      <li class="list-group-item">
+        Ejecuta <code>pytest</code> y lee los tests que hay en cada feature.
+      </li>
+      <li class="list-group-item">
+        Crea tu propia feature copiando la estructura de <code>tasks</code>.
+      </li>
+    </ol>
+  </div>
+</div>
+{% endblock %}

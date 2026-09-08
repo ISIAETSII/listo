@@ -1,0 +1,23 @@
+{# Macros para pintar campos de WTForms con las clases de Bootstrap.
+   Uso: {% from "macros/forms.html" import render_field %} ... {{ render_field(form.title) }}
+
+   `kwargs` es una variable especial de Jinja: recoge los argumentos extra con los que se
+   llama a la macro (por ejemplo, autofocus=true o rows=4) y se los pasamos tal cual a la
+   etiqueta HTML. El operador `~` concatena cadenas. #}
+
+{% macro render_field(field) %}
+  <div class="mb-3">
+    {{ field.label(class="form-label") }}
+    {{ field(class="form-control" ~ (" is-invalid" if field.errors else ""), **kwargs) }}
+    {% for error in field.errors %}
+      <div class="invalid-feedback">{{ error }}</div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro render_checkbox(field) %}
+  <div class="form-check mb-3">
+    {{ field(class="form-check-input") }}
+    {{ field.label(class="form-check-label") }}
+  </div>
+{% endmacro %}
