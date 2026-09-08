@@ -1,0 +1,61 @@
+# Despliegue en producción: la aplicación servida por gunicorn + MariaDB.
+#
+#   cp .env.example .env      → y pon valores REALES (SECRET_KEY y contraseñas nuevas)
+#   docker compose -f docker-compose.prod.yml up -d --build
+#   docker compose -f docker-compose.prod.yml logs -f web
+#   docker compose -f docker-compose.prod.yml down
+#
+# Un servidor web del anfitrión (nginx) recibe las peticiones HTTPS y las reenvía al puerto
+# WEB_PORT de esta máquina. Si la aplicación se sirve bajo un prefijo (por ejemplo,
+# isia.us.es/listo), define URL_PREFIX=/listo en .env; si se sirve en la raíz, déjalo vacío.
+
+name: listo-prod
+
+services:
+  db:
+    image: mariadb:11.8
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Define MARIADB_ROOT_PASSWORD en .env}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-listo_db}
+      MARIADB_USER: ${MARIADB_USER:-listo_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?Define MARIADB_PASSWORD en .env}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Define SECRET_KEY en .env}
+      MARIADB_HOSTNAME: db
+      MARIADB_PORT: 3306
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-listo_db}
+      MARIADB_USER: ${MARIADB_USER:-listo_user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?Define MARIADB_PASSWORD en .env}
+      DATABASE_URL: ""
+      # Prefijo de URL bajo el que se sirve la aplicación (gunicorn lo quita de cada petición
+      # y Flask lo añade a los enlaces que genera)
+      SCRIPT_NAME: ${URL_PREFIX:-}
+      # Las cookies llevan nombre y ruta propios para no chocar con otras aplicaciones
+      # que vivan en el mismo dominio, y solo viajan por HTTPS
+      FLASK_SESSION_COOKIE_NAME: listo_session
+      FLASK_SESSION_COOKIE_PATH: ${URL_PREFIX:-/}
+      FLASK_SESSION_COOKIE_SECURE: "true"
+      FLASK_REMEMBER_COOKIE_NAME: listo_remember
+      FLASK_REMEMBER_COOKIE_PATH: ${URL_PREFIX:-/}
+      FLASK_REMEMBER_COOKIE_SECURE: "true"
+    ports:
+      - "${WEB_PORT:-5000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "flask init-db && flask seed-db && gunicorn --bind 0.0.0.0:8000 --workers 2 'app:create_app()'"
+
+volumes:
+  mariadb_data:

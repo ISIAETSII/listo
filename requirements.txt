@@ -16,3 +16,6 @@ python-dotenv==1.2.3
 # Desarrollo: tests y linter
 pytest==9.1.1
 ruff==0.16.6
+
+# Servidor web para producción (lo usa docker-compose.prod.yml)
+gunicorn==26.2.0
