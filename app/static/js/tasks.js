@@ -7,13 +7,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Flask-WTF exige este token en las peticiones POST (protección CSRF)
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  // Dirección base de la aplicación: vacía en tu máquina y /listo en isia.us.es/listo
+  const root = document.querySelector('meta[name="script-root"]').content;
 
   document.querySelectorAll("[data-task-toggle]").forEach((checkbox) => {
     checkbox.addEventListener("change", async () => {
       const taskId = checkbox.dataset.taskToggle;
 
       try {
-        const response = await fetch(`/api/tasks/${taskId}/toggle`, {
+        const response = await fetch(`${root}/api/tasks/${taskId}/toggle`, {
           method: "POST",
           headers: { "X-CSRFToken": csrfToken },
         });
