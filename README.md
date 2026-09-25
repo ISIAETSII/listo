@@ -137,8 +137,9 @@ del contenedor, así que los cambios se ven al recargar la página.
 
 Para pararlo, `docker compose down`. Si además quieres borrar la base de datos, `docker compose down -v`.
 
-Si ya tienes algo escuchando en el puerto 3306 o en el 5000, cambia `MARIADB_PORT` o `WEB_PORT` en `.env`
-(estas dos variables solo afectan a Docker).
+Si ya tienes algo escuchando en el puerto 3306 o en el 5000, cambia `MARIADB_PORT` o `WEB_PORT` en `.env`.
+`WEB_PORT` solo lo usa Docker, pero `MARIADB_PORT` también lo usan `flask run` y los demás comandos `flask`
+para conectarse a MariaDB, así que afecta también a la puesta en marcha sin Docker.
 
 Los ficheros que crea el contenedor dentro del proyecto (por ejemplo `.pytest_cache` al ejecutar
 `docker compose exec web pytest`) pertenecen a root. Si después `pytest` o `ruff` fallan en tu máquina con
@@ -179,12 +180,16 @@ En cada `push` y `pull request`, GitHub Actions ([.github/workflows/ci.yml](.git
 instala las dependencias, pasa el linter (`ruff check .`), comprueba el formato (`ruff format --check .`)
 y ejecuta los tests (`pytest`). Antes de subir cambios, ejecuta esos tres comandos en tu máquina.
 
+En un fork, GitHub Actions viene desactivado. Actívalo una vez en la pestaña *Actions* de tu fork (botón
+*I understand my workflows, go ahead and enable them*). Hasta entonces, los `push` no lanzan la CI.
+
 ## Cómo añadir una feature
 
 Supongamos que quieres añadir `notes`.
 
 1. Crea `app/features/notes/` copiando la estructura de `tasks` (`__init__.py`, `models.py`, `forms.py`,
-   `services.py`, `routes.py`, `templates/notes/` y `tests/`).
+   `services.py`, `routes.py`, `templates/notes/` y `tests/`). La carpeta `tests/` necesita un `__init__.py`
+   vacío, como en las demás features. Sin él, dos features con un `test_routes.py` chocan al ejecutar `pytest`.
 2. En `app/features/notes/__init__.py` define el blueprint e importa las rutas al final del fichero,
    igual que hace `tasks`. El comentario `noqa` evita que el linter se queje de que ese import no está
    al principio del fichero.
