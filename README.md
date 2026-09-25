@@ -58,28 +58,40 @@ navegador ──► routes.py (vista) ──► services.py (lógica) ──► 
 
 ## Puesta en marcha en tu máquina
 
-Necesitas tener instalados Python 3.12 o superior, MariaDB y git.
+Antes de empezar necesitas tener hecha la **Práctica 0** (Ubuntu 24.04 LTS, Python 3.13 con entornos
+virtuales, git, Visual Studio Code y tu clave SSH en GitHub). Todos los comandos son para la terminal de Ubuntu.
 
-1. **Entorno virtual y dependencias.** El entorno virtual aísla las librerías de este proyecto de las
-   del resto del sistema.
+### MariaDB
+
+MariaDB es la base de datos donde Listo guarda los usuarios y las tareas. Solo hay que instalarlo una vez.
+
+```bash
+sudo apt update
+sudo apt install -y mariadb-server
+sudo systemctl status mariadb      # debe poner active (running); sal con q
+```
+
+### Paso a paso
+
+1. **Haz un fork y clónalo.** En GitHub, haz un fork de este repositorio y llámalo `listo_practicas`.
+   Después clónalo con la dirección SSH de tu fork (botón *Code*, pestaña *SSH*) y entra en la carpeta.
 
    ```bash
-   python3 -m venv .venv          # en Windows, py -m venv .venv
-   source .venv/bin/activate      # en Windows, .venv\Scripts\activate
-   pip install -r requirements.txt
+   git clone <dirección SSH de tu fork>
+   cd listo_practicas
    ```
 
-   En PowerShell, si al activar el entorno sale un error de permisos, ejecuta antes
-   `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+2. **Entorno virtual y dependencias.** El entorno virtual aísla las librerías de este proyecto de las
+   del resto del sistema. Cada vez que abras una terminal nueva, vuelve a activarlo.
 
-2. **MariaDB instalado y arrancado.**
+   ```bash
+   python3.13 -m venv .venv          # crea el entorno (solo la primera vez)
+   source .venv/bin/activate         # lo activa; verás (.venv) delante
+   pip install -r requirements.txt   # instala las dependencias
+   ```
 
-   * Linux (Ubuntu o Debian). `sudo apt install mariadb-server` y entra en la consola con `sudo mariadb`.
-   * macOS. `brew install mariadb`, `brew services start mariadb` y entra con `mariadb -u root`.
-   * Windows. Instalador de mariadb.org y entra desde el acceso directo "Command Prompt (MariaDB)"
-     con `mariadb -u root -p`.
-
-3. **Base de datos y usuario.** Solo hay que hacerlo una vez, desde la consola de MariaDB.
+3. **Base de datos y usuario.** Solo hay que hacerlo una vez. Entra en la consola de MariaDB con
+   `sudo mariadb`, ejecuta estas órdenes y sal con `EXIT;`.
 
    ```sql
    CREATE DATABASE listo_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -88,25 +100,31 @@ Necesitas tener instalados Python 3.12 o superior, MariaDB y git.
    FLUSH PRIVILEGES;
    ```
 
-4. **Configuración.** Copia `.env.example` a `.env` (`cp .env.example .env`; en Windows,
-   `copy .env.example .env`) y comprueba que los valores `MARIADB_*` coinciden con lo que has creado
-   en el paso anterior.
+4. **Configuración.** Copia la plantilla con `cp .env.example .env` y comprueba que los valores
+   `MARIADB_*` del fichero `.env` coinciden con lo que has creado en el paso anterior. El `.env` no se sube
+   al repositorio porque contiene contraseñas (está en `.gitignore`).
 
 5. **Tablas y datos de ejemplo.**
 
    ```bash
-   flask init-db
-   flask seed-db
+   flask init-db      # crea las tablas
+   flask seed-db      # añade los datos de ejemplo
    ```
 
 6. **Arrancar.** Ejecuta `flask run` y abre en el navegador la dirección que aparece en la terminal
    (localhost, puerto 5000). Puedes entrar con el usuario `demo@listo.app` y la contraseña `demo1234`
-   (solo existe en tu máquina; en producción no se cargan los datos de ejemplo).
-   Si el puerto 5000 está ocupado (en macOS suele usarlo AirPlay), arranca con `flask run --port 5001`.
+   (solo existe en tu máquina; en producción no se cargan los datos de ejemplo). Para pararlo, pulsa
+   Ctrl+C en la terminal. Si el puerto 5000 está ocupado, arranca con `flask run --port 5001`.
+
+### Si algo falla
+
+* **No encuentra `flask`.** Activa el entorno virtual (paso 2).
+* **`Permission denied (publickey)` al clonar.** Revisa tu clave SSH en GitHub (Práctica 0).
+* **Error de conexión a MariaDB.** Comprueba que está en marcha y que el `.env` coincide con el paso 3.
 
 ## Puesta en marcha con Docker
 
-Con Docker no hace falta instalar Python ni MariaDB. Solo necesitas Docker Desktop.
+Con Docker no hace falta instalar Python ni MariaDB. Solo necesitas Docker y Docker Compose.
 
 ```bash
 cp .env.example .env
@@ -122,7 +140,7 @@ Para pararlo, `docker compose down`. Si además quieres borrar la base de datos,
 Si ya tienes algo escuchando en el puerto 3306 o en el 5000, cambia `MARIADB_PORT` o `WEB_PORT` en `.env`
 (estas dos variables solo afectan a Docker).
 
-En Linux, los ficheros que crea el contenedor dentro del proyecto (por ejemplo `.pytest_cache` al ejecutar
+Los ficheros que crea el contenedor dentro del proyecto (por ejemplo `.pytest_cache` al ejecutar
 `docker compose exec web pytest`) pertenecen a root. Si después `pytest` o `ruff` fallan en tu máquina con
 un error de permisos, borra esas carpetas con `sudo rm -rf .pytest_cache .ruff_cache`.
 
