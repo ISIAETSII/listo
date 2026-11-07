@@ -10,3 +10,5 @@
 - `git commit -am "mensaje"`: add y commit de lo ya seguido
 - `git restore <fichero>`: descarta lo que no has guardado
 - Atajos de teclado: mira ATAJOS.md
+- `git revert HEAD`: deshace el u
+ltimo commit con otro commit
