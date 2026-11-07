@@ -1,5 +1,6 @@
 # Sobre m
 
-Usuario de GitHub: franciscogarciagil2007-sketch
+Lenguaje favorito: Python
+Usuario de GitHub: franciscogg07
 Grupo de pra
 cticas: L1
