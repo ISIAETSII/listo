@@ -14,3 +14,4 @@
 - `git revert HEAD`: deshace el u
 ltimo commit con otro commit
 - `git fetch`: descarga lo nuevo sin tocar tus ficheros
+- `git fetch`: descarga lo nuevo sin tocar tus ficheros
