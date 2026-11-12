@@ -1,4 +1,4 @@
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app.features.tasks import services, tasks_bp
@@ -13,6 +13,24 @@ def index():
     return render_template(
         "tasks/index.html", tasks=tasks, pending=pending, done=len(tasks) - pending
     )
+
+
+@tasks_bp.route("/count")
+@login_required
+def count():
+    state = request.args.get("state", "pending")
+    tasks = services.list_tasks(current_user)
+
+    if state == "pending":
+        selected = len([task for task in tasks if not task.done])
+    elif state == "done":
+        selected = len([task for task in tasks if task.done])
+    elif state == "all":
+        selected = len(tasks)
+    else:
+        return "Estado no válido: usa pending, done o all.", 400
+
+    return f"{selected} de {len(tasks)}"
 
 
 @tasks_bp.route("/new", methods=["GET", "POST"])

@@ -5,10 +5,14 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.13", "3.14"]
     steps:
       - name: Descargar el código
         uses: actions/checkout@v5
@@ -16,7 +20,7 @@ jobs:
       - name: Instalar Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
           cache: pip
 
       - name: Instalar dependencias
@@ -30,3 +34,9 @@ jobs:
 
       - name: Tests
         run: pytest
+
+      - name : Versiones
+        run: pip list
+
+
+
