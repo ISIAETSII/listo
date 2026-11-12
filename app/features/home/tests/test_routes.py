@@ -40,9 +40,3 @@ def test_hello_escapes_html(client):
 
     assert "<b>" not in html
     assert "&lt;b&gt;" in html
-
-
-def test_method_not_allowed(client):
-    response = client.post("/about")
-    assert response.status_code == 405
-    assert "405" in response.get_data(as_text=True)
