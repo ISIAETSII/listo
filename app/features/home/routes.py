@@ -1,4 +1,4 @@
-from flask import render_template, request 
+from flask import render_template, request
 from markupsafe import escape
 
 from app.features.home import home_bp
@@ -17,6 +17,8 @@ def about():
 @home_bp.route("/hello/<name>")
 def hello(name):
     return f"Hola, {escape(name)}"
+
+
 @home_bp.route("/hello")
 def hello_query():
     name = request.args.get("name", "desconocido")

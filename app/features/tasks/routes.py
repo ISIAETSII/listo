@@ -22,6 +22,7 @@ def count():
     pending = len([task for task in tasks if not task.done])
     return f"{pending} de {len(tasks)}"
 
+
 @tasks_bp.route("/new", methods=["GET", "POST"])
 @login_required
 def create():
@@ -58,5 +59,3 @@ def delete(task_id):
     services.delete_task(task)
     flash("Tarea eliminada.", "info")
     return redirect(url_for("tasks.index"))
-
-
