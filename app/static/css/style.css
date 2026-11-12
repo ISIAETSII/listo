@@ -49,3 +49,8 @@ body {
 .correcto:focus {
   border: 2px solid #1f7a4d;
 }
+/* Contador de caracteres: rojo y en negrita al pasarse del máximo */
+.contador-pasado {
+  color: #a80132;
+  font-weight: bold;
+}

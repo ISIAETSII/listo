@@ -9,9 +9,10 @@
       <div class="card-body p-4">
         <h1 class="h3 mb-4">{{ title }}</h1>
 
-        <form method="post" novalidate>
+        <form id="tarea" method="post" novalidate>
           {{ form.hidden_tag() }}
           {{ render_field(form.title, autofocus=true) }}
+          <p id="contador" class="form-text"></p>
           {{ render_field(form.description, rows=4) }}
           <div class="d-flex gap-2">
             {{ form.submit(class="btn btn-primary") }}
@@ -22,4 +23,7 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tarea.js') }}"></script>
 {% endblock %}
