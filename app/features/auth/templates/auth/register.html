@@ -9,12 +9,13 @@
       <div class="card-body p-4">
         <h1 class="h3 mb-4"><i class="bi bi-person-plus me-2 text-primary"></i>Crear cuenta</h1>
 
-        <form method="post" novalidate>
+        <form id="registro" method="post" novalidate>
           {{ form.hidden_tag() }}
           {{ render_field(form.name, autofocus=true) }}
           {{ render_field(form.email) }}
           {{ render_field(form.password) }}
           {{ render_field(form.confirm) }}
+          <ul id="errores" class="text-danger"></ul>
           {{ form.submit(class="btn btn-primary w-100") }}
         </form>
 
@@ -25,4 +26,8 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/registro.js') }}"></script>
 {% endblock %}
