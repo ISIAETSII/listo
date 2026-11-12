@@ -1,4 +1,5 @@
-from flask import render_template
+from flask import render_template, request 
+from markupsafe import escape
 
 from app.features.home import home_bp
 
@@ -12,8 +13,11 @@ def index():
 def about():
     return "<h1>Acerca de Listo</h1><p>El proyecto base de ISIA.</p>"
 
-def test_about_page(client):
-    response = client.get("/about")
-    
-    assert response.status_code == 200
-    assert "Acerca de Listo" in response.get_data(as_text=True)
+
+@home_bp.route("/hello/<name>")
+def hello(name):
+    return f"Hola, {escape(name)}"
+@home_bp.route("/hello")
+def hello_query():
+    name = request.args.get("name", "desconocido")
+    return f"Hola, {escape(name)}"

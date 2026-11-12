@@ -51,3 +51,5 @@ def delete(task_id):
     services.delete_task(task)
     flash("Tarea eliminada.", "info")
     return redirect(url_for("tasks.index"))
+
+
