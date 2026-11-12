@@ -1,40 +1,64 @@
 // Valida el formulario de registro en el navegador, antes de enviarlo.
 // El servidor lo vuelve a comprobar todo (forms.py): esto es solo una comodidad.
 const formulario = document.getElementById("registro");
-const listaErrores = document.getElementById("errores");
+const campoNombre = document.getElementById("name");
+const campoEmail = document.getElementById("email");
+const campoClave = document.getElementById("password");
+const campoRepetida = document.getElementById("confirm");
+
+// Borra las marcas y los mensajes del intento anterior
+function limpiarErrores() {
+  for (const campo of formulario.querySelectorAll(".is-invalid")) {
+    campo.classList.remove("is-invalid");
+  }
+  for (const aviso of formulario.querySelectorAll(".invalid-feedback")) {
+    aviso.remove();
+  }
+}
+
+// Marca un campo en rojo y escribe el mensaje debajo de él
+function mostrarError(campo, mensaje) {
+  campo.classList.add("is-invalid");
+  const aviso = document.createElement("div");
+  aviso.classList.add("invalid-feedback");
+  aviso.textContent = mensaje;
+  campo.parentElement.appendChild(aviso);
+}
 
 formulario.addEventListener("submit", (evento) => {
-  // 1. Leer lo que ha escrito el usuario
-  const nombre = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const clave = document.getElementById("password").value;
-  const claveRepetida = document.getElementById("confirm").value;
+  limpiarErrores();
+  let hayErrores = false;
 
-  // 2. Aplicar las reglas y acumular los errores
-  const errores = [];
-  if (nombre === "") {
-    errores.push("El nombre es obligatorio.");
+  if (campoNombre.value.trim() === "") {
+    mostrarError(campoNombre, "El nombre es obligatorio.");
+    hayErrores = true;
   }
-  if (!email.includes("@")) {
-    errores.push("El correo debe contener una arroba.");
+  if (!campoEmail.value.includes("@")) {
+    mostrarError(campoEmail, "El correo debe contener una arroba.");
+    hayErrores = true;
   }
-  if (clave.length < 6) {
-    errores.push("La contraseña necesita al menos 6 caracteres.");
+  if (campoClave.value.length < 6) {
+    mostrarError(campoClave, "La contraseña necesita al menos 6 caracteres.");
+    hayErrores = true;
   }
-  if (clave !== claveRepetida) {
-    errores.push("Las contraseñas no coinciden.");
-  }
-
-  // 3. Mostrar los errores (primero se borran los del intento anterior)
-  listaErrores.innerHTML = "";
-  for (const error of errores) {
-    const elemento = document.createElement("li");
-    elemento.textContent = error;
-    listaErrores.appendChild(elemento);
+  if (campoClave.value !== campoRepetida.value) {
+    mostrarError(campoRepetida, "Las contraseñas no coinciden.");
+    hayErrores = true;
   }
 
-  // 4. Si hay errores, cancelar el envío
-  if (errores.length > 0) {
+  if (hayErrores) {
     evento.preventDefault();
   }
 });
+
+// Avisa mientras se escribe: compara las dos contraseñas a cada tecla
+function comprobarClaves() {
+  limpiarErrores(); // en cuanto vuelve a escribir, fuera los avisos del último envío
+  const escrita = campoRepetida.value !== "";
+  const distintas = campoRepetida.value !== campoClave.value;
+  campoRepetida.classList.toggle("error", escrita && distintas);
+  campoRepetida.classList.toggle("correcto", escrita && !distintas);
+}
+
+campoRepetida.addEventListener("input", comprobarClaves);
+campoClave.addEventListener("input", comprobarClaves);
