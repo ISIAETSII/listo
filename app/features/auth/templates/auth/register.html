@@ -13,6 +13,10 @@
           {{ form.hidden_tag() }}
           {{ render_field(form.name, autofocus=true) }}
           {{ render_field(form.email) }}
+          <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <input class="form-control" id="dni" name="dni" type="text" maxlength="9">
+          </div>
           {{ render_field(form.password) }}
           {{ render_field(form.confirm) }}
           {{ form.submit(class="btn btn-primary w-100") }}
