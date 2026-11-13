@@ -14,6 +14,13 @@ def index():
         "tasks/index.html", tasks=tasks, pending=pending, done=len(tasks) - pending
     )
 
+@tasks_bp.route("/count")
+@login_required
+def count():
+    tasks = services.list_tasks(current_user)
+    pending = len([task for task in tasks if not task.done])
+    return f"{pending} de {len(tasks)}"
+
 
 @tasks_bp.route("/new", methods=["GET", "POST"])
 @login_required
