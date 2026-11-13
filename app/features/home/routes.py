@@ -13,6 +13,7 @@ def index():
 def about():
     return "<h1>Acerca de Listo</h1><p>El proyecto base de ISIA.</p>"
 
+
 @home_bp.route("/hello/<name>")
 def hello(name):
     return f"Hola, {escape(name)}"

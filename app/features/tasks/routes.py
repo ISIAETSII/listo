@@ -14,6 +14,7 @@ def index():
         "tasks/index.html", tasks=tasks, pending=pending, done=len(tasks) - pending
     )
 
+
 @tasks_bp.route("/count")
 @login_required
 def count():

@@ -75,7 +75,6 @@ def register_error_handlers(app):
             code=405,
             message="Esa dirección no admite este método.",
         ), 405
-    
 
     @app.errorhandler(500)
     def internal_error(error):
