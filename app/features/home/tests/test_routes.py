@@ -17,3 +17,9 @@ def test_index_shows_tasks_link_to_logged_users(logged_client):
     html = logged_client.get("/").get_data(as_text=True)
 
     assert "Mis tareas" in html
+
+def test_about_page(client):
+    response = client.get("/about")
+
+    assert response.status_code == 200
+    assert "Acerca de Listo" in response.get_data(as_text=True)
