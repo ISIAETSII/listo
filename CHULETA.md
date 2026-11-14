@@ -11,3 +11,4 @@
 -`git restore <fichero>`: descarta lo que no has guardado
 - Atajos de teclado: mira ATAJOS.md
 -`git revert HEAD`: deshace el último comit con otro commit
+-`git fetch`:descarga lo nuevo sin tocar tus ficheros
