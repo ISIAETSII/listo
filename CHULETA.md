@@ -4,3 +4,4 @@
 - `git commit -m "mensaje"`: guarda lo preparado en un commit
 - `git diff`: lo que has cambiado y aún no has preparado
 - `git diff --staged`: lo que ya está preparado
+- `git log --oneline`: el historial, un commit por línea
