@@ -6,13 +6,21 @@ from app.features.tasks.forms import TaskForm
 
 
 @tasks_bp.route("/")
-@login_required
+@login_required  # Otro decorador para evitar tneer que definir el login
 def index():
     tasks = services.list_tasks(current_user)
     pending = len([task for task in tasks if not task.done])
     return render_template(
         "tasks/index.html", tasks=tasks, pending=pending, done=len(tasks) - pending
     )
+
+
+@tasks_bp.route("/count")
+@login_required
+def count():
+    tasks = services.list_tasks(current_user)
+    pending = len([task for task in tasks if not task.done])
+    return f"{pending} de {len(tasks)}"
 
 
 @tasks_bp.route("/new", methods=["GET", "POST"])

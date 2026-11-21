@@ -1,5 +1,5 @@
 # Listo
-
+[![CI](https://github.com/Danitti/listo-danitti/actions/workflows/ci.yml/badge.svg)](https://github.com/Danitti/listo-danitti/actions/workflows/ci.yml)
 **Listo** es el proyecto base de la asignatura. Es un gestor de tareas pequeño, hecho con Flask y MariaDB,
 pensado para ser vistoso y muy fácil de entender. Sobre él se hacen las prácticas (instalación del sistema
 base, gestión del código fuente, integración continua, contenedores y aislamiento, JavaScript y Flask)
