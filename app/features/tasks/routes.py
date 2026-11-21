@@ -10,9 +10,11 @@ from app.features.tasks.forms import TaskForm
 def index():
     tasks = services.list_tasks(
         current_user
-    )  # Lo de services es una especie de archivo con la lista de tareas de cada usuario (supuestamente).
+    )
+# Lo de services es una especie de archivo con la lista de tareas de cada usuario
     pending = len([task for task in tasks if not task.done])
-    return render_template(  # Siempre tiene que devolver algo, devuelve un renderizado que es cargar el archivo index.html
+    return render_template(
+# Siempre tiene que devolver algo, un renderizado que es cargar el archivo index.html
         "tasks/index.html", tasks=tasks, pending=pending, done=len(tasks) - pending
     )
 

@@ -1,5 +1,6 @@
 from flask import render_template, request
 from markupsafe import escape
+
 from app.features.home import home_bp
 
 
