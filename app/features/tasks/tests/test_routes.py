@@ -14,7 +14,7 @@ def test_tasks_require_login(client):
 def test_empty_list(logged_client):
     html = logged_client.get("/tasks/").get_data(as_text=True)
 
-    assert "Todavía no tienes tareas" in html
+    assert "Aún no hay tareas" in html
 
 
 def test_create_task(logged_client, user):
