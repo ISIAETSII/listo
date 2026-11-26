@@ -21,6 +21,18 @@ def list_tasks(user):
     return db.session.scalars(query).all()
 
 
+def task_stats(user):
+    """Cuántas tareas tiene el usuario, cuántas ha terminado y qué porcentaje supone."""
+    tasks = list_tasks(user)
+    done = len([task for task in tasks if task.done])
+    percent = round(done * 100 / len(tasks)) if tasks else 0
+    return {
+        "total": len(tasks),
+        "done": done,
+        "pending": len(tasks) - done,
+        "percent": percent,
+    }
+
 def get_task(user, task_id):
     """Una tarea concreta del usuario, o None si no existe o pertenece a otra persona."""
     task = db.session.get(Task, task_id)

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Tu progreso{% endblock %}
+
+{% block content %}
+<h1 class="h2 mb-4">Tu progreso</h1>
+
+{% if stats.total == 0 %}
+    <p class="lead">Todavía no tienes tareas.</p>
+{% else %}
+    <p class="stats-number">{{ stats.percent }} %</p>
+    <p class="text-muted">Has terminado {{ stats.done }} de {{ stats.total }} tareas.</p>
+
+    <h2 class="h5 mt-4">Te quedan</h2>
+    <ul>
+        {% for task in pending_tasks %}
+            <li>{{ task.title }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{{ url_for('tasks.index') }}" class="btn btn-outline-secondary">
+    Volver a mis tareas
+</a>
+{% endblock %}
