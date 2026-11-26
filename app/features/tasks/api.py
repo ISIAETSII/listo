@@ -18,6 +18,10 @@ def list_tasks():
     tasks = services.list_tasks(current_user)
     return jsonify([task.to_dict() for task in tasks])
 
+@tasks_api_bp.route("/stats") # GET /api/tasks/stats
+@login_required
+def stats():
+   return jsonify(services.task_stats(current_user))
 
 @tasks_api_bp.route("/<int:task_id>/toggle", methods=["POST"])  # POST /api/tasks/3/toggle
 @login_required

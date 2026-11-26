@@ -29,3 +29,12 @@ def test_flash_shows_the_title(logged_client):
     response = logged_client.post("/tasks/new", data={"title": "Leer"}, follow_redirects=
     True)
     assert "Tarea creada: «Leer»." in response.get_data(as_text=True)
+
+
+def test_api_stats(logged_client, user):
+    services.create_task(user, "Pendiente")
+    services.toggle_task(services.create_task(user, "Hecha"))
+    response = logged_client.get("/api/tasks/stats")
+    assert response.status_code == 200
+    assert response.content_type == "application/json"
+    assert response.get_json() == {"total": 2, "done": 1, "pending": 1, "percent": 50}
