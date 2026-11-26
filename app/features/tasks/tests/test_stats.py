@@ -24,3 +24,8 @@ def test_stats_page_escapes_html(logged_client, user):
     services.create_task(user, "<b>Urgente</b>")
     html = logged_client.get("/tasks/stats").get_data(as_text=True)
     assert "&lt;b&gt;Urgente&lt;/b&gt;" in html
+
+def test_flash_shows_the_title(logged_client):
+    response = logged_client.post("/tasks/new", data={"title": "Leer"}, follow_redirects=
+    True)
+    assert "Tarea creada: «Leer»." in response.get_data(as_text=True)

@@ -11,6 +11,7 @@ def test_register_creates_user_and_logs_in(client):
             "email": "luis@example.com",
             "password": "secreto123",
             "confirm": "secreto123",
+            "dni": "12345678Z",
         },
         follow_redirects=True,
     )
@@ -28,6 +29,7 @@ def test_register_rejects_duplicate_email(client, user):
             "email": user.email,
             "password": "secreto123",
             "confirm": "secreto123",
+            "dni": "12345678Z",
         },
     )
 

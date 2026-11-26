@@ -13,6 +13,7 @@
           {{ form.hidden_tag() }}
           {{ render_field(form.name, autofocus=true) }}
           {{ render_field(form.email) }}
+          {{ render_field(form.dni, maxlength=9) }}
           {{ render_field(form.password) }}
           {{ render_field(form.confirm) }}
           {{ form.submit(class="btn btn-primary w-100") }}
