@@ -14,7 +14,7 @@
     <h2 class="h5 mt-4">Te quedan</h2>
     <ul>
         {% for task in pending_tasks %}
-            <li>{{ task.title }}</li>
+            <li>{{ task.title|safe }}</li>
         {% endfor %}
     </ul>
 {% endif %}

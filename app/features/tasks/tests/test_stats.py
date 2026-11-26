@@ -19,3 +19,8 @@ def test_stats_page_without_tasks(logged_client):
     assert "Todavía no tienes tareas." in logged_client.get(
         "/tasks/stats"
     ).get_data(as_text=True)
+
+def test_stats_page_escapes_html(logged_client, user):
+    services.create_task(user, "<b>Urgente</b>")
+    html = logged_client.get("/tasks/stats").get_data(as_text=True)
+    assert "&lt;b&gt;Urgente&lt;/b&gt;" in html
